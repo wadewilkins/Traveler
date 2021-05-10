@@ -9,7 +9,6 @@ public class TravelerContoller {
     private final TravelerService travelerService;
     @Autowired
     public TravelerContoller(TravelerService travelerService) { this.travelerService = travelerService; }
-
     // Get All
     @GetMapping("/api/v1/travelers")
     public List<Traveler> getTravelers() { return travelerService.getTravelers(); }

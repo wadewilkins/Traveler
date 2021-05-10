@@ -1,6 +1,7 @@
 package com.wwilkins.traveler.traveler;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
@@ -10,15 +11,29 @@ public class TravelerService {
         return List.of(
                 new Traveler(
                         1L,
-                        "Wade C2 Wilkins",
-                        LocalDate.of(2000, Month.JANUARY, 5),
-                        "wadewilkins@gmail.com"
+                        "Wade",
+                        "Clayton",
+                        "Wilkins",
+                        "wadewilkins",
+                        "4252238062",
+                        "wadewilkins@gmail.com",
+                        "hashofpassword",
+                        LocalDateTime.of( 2000, Month.JANUARY, 5, 00,00 ),
+                        LocalDateTime.of( 2000, Month.JANUARY, 5, 00, 00),
+                        LocalDate.of(2000, Month.JANUARY, 5)
                 ),
                 new Traveler(
                         2L,
-                        "Barb Wilkins",
-                        LocalDate.of(2000, Month.JANUARY, 6),
-                        "barbwilkins@gmail.com"
+                        "Barb",
+                        "Stamey",
+                        "Wilkins",
+                        "barbwilkins",
+                        "360",
+                        "barbiewilkins@gmail.com",
+                        "hashofpassword",
+                        LocalDateTime.of( 2000, Month.JANUARY, 5, 00,00 ),
+                        LocalDateTime.of( 2000, Month.JANUARY, 5, 00, 00),
+                        LocalDate.of(2000, Month.JANUARY, 5)
                 )
         );
     }
@@ -26,9 +41,16 @@ public class TravelerService {
         return List.of(
                 new Traveler(
                         1L,
-                        "Wade C2 Wilkins",
-                        LocalDate.of(2000, Month.JANUARY, 5),
-                        "wadewilkins@gmail.com"
+                        "Wade",
+                        "Clayton",
+                        "Wilkins",
+                        "wadewilkins",
+                        "4252238062",
+                        "wadewilkins@gmail.com",
+                        "hashofpassword",
+                        LocalDateTime.of( 2000, Month.JANUARY, 5, 00,00 ),
+                        LocalDateTime.of( 2000, Month.JANUARY, 5, 00, 00),
+                        LocalDate.of(2000, Month.JANUARY, 5)
                 )
         );
     }
