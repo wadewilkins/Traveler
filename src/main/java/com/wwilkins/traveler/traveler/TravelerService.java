@@ -69,6 +69,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
 
     }
      */
+    /*
     public List<Traveler> getTravelers() {
         return List.of(
                 new Traveler(
@@ -109,7 +110,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
     public List<String> deleteTraveler( String id, String body) {
         return List.of("Delete","Me",body);
     }
-
+*/
     @Override
     public ResponseEntity insertTraveler(String body) {
         LocalDateTime registeredAt;
@@ -168,34 +169,38 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
     @Override
     public List<Traveler> getAllTravelers(String cid){
         logger.info("In getAllTravelers NOW...." + cid);
-        String sql = "SELECT * FROM Traveler WHERE customer_id = UUID_TO_BIN('" + cid + "')" ;
+        String sql = "SELECT BIN_TO_UUID(customer_id) AS C,BIN_TO_UUID(traveler_id) AS T, DATE_FORMAT(dob,'%Y-%m-%d') AS D, "+
+                            "first_name,middleName,last_name,gender "+
+                "FROM Traveler WHERE customer_id = UUID_TO_BIN('" + cid + "')" ;
         List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql);
 
         List<Traveler> result = new ArrayList<Traveler>();
         for(Map<String, Object> row:rows){
             Traveler t = new Traveler();
-            //t = (UUID).fromString(row.get("traveler_id"));
-            //t.setTravelerId((row.get("traveler_id"));
-            //t.setCustomerId((UUID)row.get("customer_id"));
+            String Tstring = (String) row.get( "T" );
+            UUID tid = UUID.fromString(Tstring);
+            t.setTravelerId(tid);
+            UUID cust_id = UUID.fromString((String) row.get("C"));
+            t.setCustomerId(cust_id);
             t.setFirstName((String)row.get("first_name"));
-//            t.setMiddleName((String)row.get("middleName"));
+            t.setMiddleName((String)row.get("middleName"));
             t.setLastName((String)row.get("last_name"));
-//            t.setGender((String)row.get("gender"));
-              t.setDob("1967-03-17");
-//            t.setDob((String)row.get("dob"));
-//            t.setCountryCode1((String)row.get("countryCode1"));
-//            t.setPhone1((String)row.get("phone1"));
-//            t.setCountryCode2((String)row.get("countryCode2"));
-//            t.setPhone2((String)row.get("phone2"));
-//            t.setEmergencyFirstName((String)row.get("emergencyFirstName"));
-//            t.setEmergencyLastName((String)row.get("emergencyLastName"));
-//            t.setEmergencyCountryCode((String)row.get("emergencyCountryCode"));
-//            t.setEmergencyPhone((String)row.get("emergencyPhone"));
-//            // Frequent flyer programs
-//            t.setFlightPrefSeat((String)row.get("flightPrefSeat"));
-//            t.setFlightPrefSpecial((String)row.get("flightPrefSpecial"));
-//            t.setPassportCountryCode((String)row.get("passportCountryCode"));
-//            t.setPassportNumber((String)row.get("passportNumber"));
+            t.setGender((String)row.get("gender"));
+            t.setDob((String)row.get("D"));
+            t.setCountryCode1((String)row.get("countryCode1"));
+            t.setPhone1((String)row.get("phone1"));
+            t.setCountryCode2((String)row.get("countryCode2"));
+            t.setPhone2((String)row.get("phone2"));
+            t.setEmergencyFirstName((String)row.get("emergencyFirstName"));
+            t.setEmergencyLastName((String)row.get("emergencyLastName"));
+            t.setEmergencyCountryCode((String)row.get("emergencyCountryCode"));
+            t.setEmergencyPhone((String)row.get("emergencyPhone"));
+            // Frequent flyer programs
+            t.setFlightPrefSeat((String)row.get("flightPrefSeat"));
+            t.setFlightPrefSpecial((String)row.get("flightPrefSpecial"));
+            t.setPassportCountryCode((String)row.get("passportCountryCode"));
+            t.setPassportNumber((String)row.get("passportNumber"));
+
             result.add(t);
         }
         logger.info("Returning..................");

@@ -40,7 +40,7 @@ class TravelerApplicationTests {
                     "\"middleName\": \"Clayton4\"," +
                     "\"lastName\": \"Wilkins\"," +
                     "\"gender\": \"M\"," +
-                    "\"dob\": \"1972-03-17\"," +
+                    "\"dob\": \"1942-03-17\"," +
                     "\"phone1\": \"4252238062\"," +
                     "\"countryCode1\": \"1\"," +
                     "\"countryCode2\": \"1\"," +
@@ -165,7 +165,7 @@ class TravelerApplicationTests {
             String jsonInputString = "{"+
                     "\"travelerid\": \"-1\", " +
                     "\"customerId\": \"20000000-2000-1000-1000-100000000000\", " +
-                    "\"firstName\": \"Wade\", " +
+                    "\"firstName\": \"Wade2\", " +
                     "\"middleName\": \"Clayton\"," +
                     "\"lastName\": \"Wilkins\"," +
                     "\"userName\": \"wadewilkins\"," +
