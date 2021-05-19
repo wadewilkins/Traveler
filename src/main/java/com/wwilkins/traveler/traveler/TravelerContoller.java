@@ -2,26 +2,28 @@ package com.wwilkins.traveler.traveler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import java.util.List;
+
 
 @RestController
 public class TravelerContoller {
     private final TravelerService travelerService;
-    @Autowired
+
     public TravelerContoller(TravelerService travelerService) { this.travelerService = travelerService; }
     // Get All
-    @GetMapping("/api/v1/travelers")
-    public List<Traveler> getTravelers() { return travelerService.getTravelers(); }
+    @GetMapping("/api/v1/travelers/{id}")
+    public List<Traveler> getAllTravelers(@PathVariable String id) { return travelerService.getAllTravelers(id); }
     // Get One
     @GetMapping("/api/v1/traveler/{id}")
-    public List<Traveler> getTraveler(@PathVariable String id) { return travelerService.getTraveler(id); }
+    public Traveler getOneTraveler(@PathVariable String id) { return travelerService.getOneTraveler(id); }
     // Create
     @PostMapping("/api/v1/traveler")
-    public String createTraveler(@RequestBody String body) { return travelerService.createTraveler(body); }
+    public ResponseEntity insertTraveler(@RequestBody String body) { return travelerService.insertTraveler(body); }
     // Update
     @PutMapping("/api/v1/traveler/{id}")
-    public List<String> putTraveler(@PathVariable String id,@RequestBody String body) { return travelerService.putTraveler(id,body); }
+    public ResponseEntity updateOneTraveler(@PathVariable String id,@RequestBody String body) { return travelerService.updateOneTraveler(id,body); }
     // Delete One
     @DeleteMapping("/api/v1/traveler/{id}")
-    public List<String> deleteTraveler(@PathVariable String id,@RequestBody String body) { return travelerService.deleteTraveler(id,body); }
+    public ResponseEntity deleteOneTraveler(@PathVariable String id,@RequestBody String body) { return travelerService.deleteOneTraveler(id,body); }
 }

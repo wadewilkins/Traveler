@@ -1,144 +1,182 @@
 package com.wwilkins.traveler.traveler;
 
+import org.hibernate.annotations.Type;
+import org.springframework.stereotype.Component;
 
-import org.joda.time.DateTime;
-
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.UUID;
 
-//@DynamoDBTable(tableName = "traveler")
+//@Entity
 public class Traveler {
-    private Long id;
+    //@Id
+    //@GeneratedValue(strategy=GenerationType.AUTO)
+    //@Type(type="uuid-char")
+    //@Column(name="id", columnDefinition = "VARCHAR(255)", insertable = false, updatable = false, nullable = false)
+    //    @NotNull(message = "customerId cannot be null")
+    //    private String customerId
+    private UUID travelerId;
+    @NotNull(message = "customerId cannot be null")
+    private UUID customerId;
+    @NotNull(message = "firstName cannot be null")
     private String firstName;
     private String middleName;
+    @NotNull(message = "lastName cannot be null")
     private String lastName;
-    private String userName;
-    private String mobile;
-    private String email;
-    private String passwordHash;
-    private LocalDateTime registeredAt;
-    private LocalDateTime lastLogin;
+    private String gender;
     private LocalDate dob;
+    private String countryCode1;
+    private String phone1;
+    private String countryCode2;
+    private String phone2;
+    private String emergencyFirstName;
+    private String emergencyLastName;
+    private String emergencyCountryCode;
+    private String emergencyPhone;
+    // Frequent flyer programs
+    private String frequentFlyerPrograms;
+    private String flightPrefSeat;
+    private String flightPrefSpecial;
+    private String passportCountryCode;
+    private String passportNumber;
+
+
+
+//    private int age;
 
     public Traveler() {
+
     }
 
-    public Traveler(Long id,
+
+    public Traveler( UUID travelerId,
+                    UUID customerId,
                     String fistName,
                     String middleName,
                     String lastName,
-                    String userName,
-                    String mobile,
-                    String email,
-                    String passwordHash,
-                    LocalDateTime registeredAt,
-                    LocalDateTime lastLogin,
-                    LocalDate dob){
-        this.id = id;
+                    String dob
+                    ){
+        this.travelerId = travelerId;
+        this.customerId = customerId;
         this.firstName = fistName;
         this.middleName = middleName;
         this.lastName = lastName;
-        this.userName = userName;
-        this.mobile = mobile;
-        this.passwordHash = passwordHash;
-        this.registeredAt = registeredAt;
-        this.lastLogin = lastLogin;
-        this.dob = dob;
-        this.email = email;
+        //this.dob = LocalDate.parse(dob);
     }
 
-    public Traveler(String firstName, LocalDate dob, String email) {
-        this.firstName = firstName;
-        this.dob = dob;
-        this.email = email;
-    }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-    public void setMiddleName(String middleName) {
+    public Traveler(
+                    String fistName,
+                    String middleName,
+                    String lastName,
+                    String dob
+                    ){
+        this.travelerId = UUID.randomUUID();
+        this.firstName = fistName;
         this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
         this.lastName = lastName;
+        //this.dob = LocalDate.parse(dob);
     }
 
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
+
+
+    public UUID getTravelerId() { return travelerId; }
+    public void setTravelerId(UUID travelerId) {
+        if (travelerId.equals(UUID.fromString("00000000-0000-0000-0000-000000000000") ))
+            this.travelerId = UUID.randomUUID();
+        else
+            this.travelerId = travelerId;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+
+    public UUID getCustomerId() { return customerId; }
+    public void setCustomerId(UUID customerId) {
+            this.customerId = customerId;
     }
 
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getMiddleName() { return middleName; }
+    public void setMiddleName(String middleName) { this.middleName = middleName; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public String getDob() { return dob.toString(); }
+    public void setDob(String dob) {
+        this.dob = LocalDate.parse(dob);
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-    public void setPasswordHash(String passwordHash) {
-        this.email = passwordHash;
-    }
 
-    public LocalDateTime getRegisteredAt() {
-        return registeredAt;
-    }
-    public void setRegisteredAt(LocalDateTime registeredAT) {
-        this.registeredAt = registeredAt;
-    }
+    public String getCountryCode1() { return countryCode1; }
+    public void setCountryCode1(String countryCode1) { this.countryCode1 = countryCode1; }
 
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
-    }
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
-    }
+    public String getPhone1() { return phone1; }
+    public void setPhone1(String phone1) { this.phone1 = phone1; }
 
-    public LocalDate getDob() {
-        return dob;
-    }
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
+    public String getCountryCode2() { return countryCode2; }
+    public void setCountryCode2(String countryCode2) { this.countryCode2 = countryCode2; }
+
+    public String getPhone2() { return phone2; }
+    public void setPhone2(String phone2) { this.phone2 = phone2; }
+
+    public String getEmergencyFirstName() { return emergencyFirstName; }
+    public void setEmergencyFirstName(String emergencyFirstName) { this.emergencyFirstName = emergencyFirstName; }
+
+    public String getEmergencyLastName() { return emergencyLastName; }
+    public void setEmergencyLastName(String emergencyLastName) { this.emergencyLastName = emergencyLastName; }
+
+    public String getEmergencyCountryCode() { return emergencyCountryCode; }
+    public void setEmergencyCountryCode(String emergencyCountryCode) { this.emergencyCountryCode = emergencyCountryCode; }
+
+    public String getEmergencyPhone() { return emergencyPhone; }
+    public void setEmergencyPhone(String emergencyPhone) { this.emergencyPhone = emergencyPhone; }
+
+    // Frequent flyer programs
+    //private String frequentFlyerPrograms;
+
+    public String getFlightPrefSeat() { return flightPrefSeat; }
+    public void setFlightPrefSeat(String flightPrefSeat) { this.flightPrefSeat = flightPrefSeat; }
+
+    public String getFlightPrefSpecial() { return flightPrefSpecial;  }
+    public void setFlightPrefSpecial(String flightPrefSpecial) { this.flightPrefSpecial = flightPrefSpecial; }
+
+    public String getPassportCountryCode() { return passportCountryCode;  }
+    public void setPassportCountryCode(String passportCountryCode) { this.passportCountryCode = passportCountryCode; }
+
+    public String getPassportNumber() { return passportNumber;  }
+    public void setPassportNumber(String passportNumber) { this.passportNumber = passportNumber; }
 
 
     @Override
     public String toString() {
-        return "Traveler{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", dob=" + dob +
-                ", email='" + email + '\'' +
-                '}';
+        return "Traveler{" + "'" +
+                ", travelerid=" + travelerId.toString() +
+                "  customerId="+ customerId.toString() +
+                ", firstName='" + firstName + "'" +
+                ", middleName='" + middleName + "'" +
+                ", lastName='" + lastName + "'" +
+                ", gender='" + gender + "'" +
+                ", dob='" + dob + "'" +
+                ", countryCode1='" + countryCode1 + "'" +
+                ", phone1='" + phone1 + "'" +
+                ", countryCode2='" + countryCode2 + "'" +
+                ", phone2='" + phone2 + "'" +
+
+                ", emergencyFirstName='" + emergencyFirstName + "'" +
+                ", emergencyLastName='" + emergencyLastName + "'" +
+                ", emergencyCountryCode='" + emergencyCountryCode + "'" +
+                ", emergencyPhone='" + emergencyPhone + "'" +
+                ", flightPrefSeat='" + flightPrefSeat + "'" +
+                ", flightPrefSpecial='" + flightPrefSpecial + "'" +
+                ", passportCountryCode='" + passportCountryCode + "'" +
+                ", passportNumber='" + passportNumber + "'" +
+                "}";
     }
 
 }
