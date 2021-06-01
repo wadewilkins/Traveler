@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwilkins.traveler.TravelerApplication;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -73,6 +74,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
         }
        catch (JsonProcessingException e) {
             logger.error("Bad JSON on insert "+ body);
+            //throw e;
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 //
@@ -143,14 +145,14 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
            // return new ResponseEntity<>("\"Failure\":  \"Fetch all\"", HttpStatus.BAD_REQUEST);
         }
-        logger.info("Returning..................");
+        //logger.info("Returning..................");
         //return result;
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> getOneTraveler(String tid) {
-        logger.info("In getOneTraveler....");
+        //logger.info("In getOneTraveler....");
         Traveler t = new Traveler();
         int count=0;
         String sql = "SELECT BIN_TO_UUID(customer_id) AS C,BIN_TO_UUID(traveler_id) AS T, DATE_FORMAT(dob,'%Y-%m-%d') AS D, " +
@@ -165,7 +167,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql,tid);
             //List<Traveler> result = new ArrayList<Traveler>();
             for(Map<String, Object> row:rows){
-                    logger.info("Getting One Traveler....");
+                    //logger.info("Getting One Traveler....");
                     count++;
                     String Tstring = (String) row.get( "T" );
                     UUID newtid = UUID.fromString(Tstring);
@@ -192,12 +194,12 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
                     t.setPassportNumber((String)row.get("passportNumber"));
                 }
                 if (count == 0){
-                    logger.error("Error:  GetOneTraveler, traveler not found:  "+tid);
+                    //logger.error("Error:  GetOneTraveler, traveler not found:  "+tid);
                     return new ResponseEntity<>( "Traveler not found"+tid, HttpStatus.BAD_REQUEST);
                 }
         } catch(DataAccessException sa){
-            logger.error("Error  for update one!  cid="+tid);
-            logger.error("Stack trace:  ", sa.getMessage(), sa);
+            //logger.error("Error  for update one!  cid="+tid);
+            //logger.error("Stack trace:  ", sa.getMessage(), sa);
             return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
             // return new ResponseEntity<>("\"Failure\":  \"Fetch all\"", HttpStatus.BAD_REQUEST);
         }
@@ -207,20 +209,20 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
     @Override
     public ResponseEntity<?> deleteOneTraveler(String tid, String body) {
         //private JdbcTemplate jdbcTemplateObject;
-        logger.info("In Delete........................");
+        //logger.info("In Delete........................");
         try {
             String sql = "DELETE FROM Traveler WHERE traveler_id = UUID_TO_BIN(?)";
             assert getJdbcTemplate() != null;
             int i = getJdbcTemplate().update(sql, tid);
             if ( i < 1 ) {
-                logger.info("DELETE ERROR  " + tid);
+                //logger.info("DELETE ERROR  " + tid);
                 return new ResponseEntity<>("Error:  Delete one traveler, traveler does not exists:  "+tid, HttpStatus.BAD_REQUEST);
             }
-            logger.info("DELETE!!!!!!!!!!!!!!!!!!!!!!!!!!!  " + tid);
+            //logger.info("DELETE!!!!!!!!!!!!!!!!!!!!!!!!!!!  " + tid);
             return new ResponseEntity<>(tid, HttpStatus.OK);
         } catch(DataAccessException sa){
-            logger.info("DELETE failed for:   " + tid);
-            logger.error("Stack trace:  ", sa.getMessage(), sa);
+            //logger.info("DELETE failed for:   " + tid);
+            //logger.error("Stack trace:  ", sa.getMessage(), sa);
             return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
             // return new ResponseEntity<>("\"Failure\":  \"Fetch all\"", HttpStatus.BAD_REQUEST);
         }
@@ -266,11 +268,11 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
                 assert ( getNamedParameterJdbcTemplate() != null);
                 status = getNamedParameterJdbcTemplate().update(UpdateQuery.toString(), params);
                 if ( status == 1  ) {
-                    logger.info("Traveler data updated for ID " + t2.getTravelerId());
+                    //logger.info("Traveler data updated for ID " + t2.getTravelerId());
                     return new ResponseEntity<>(t2.toString(), HttpStatus.CREATED);
                 } else {
                     logger.error("Error:  No Traveler found with ID " + t2.getTravelerId());
-                    //logger.error(UpdateQuery.toString());
+                    logger.error(UpdateQuery.toString());
                     //params.entrySet().forEach(entry -> {
                     //    logger.error(entry.getKey() + " " + entry.getValue());
                     // });

@@ -1,5 +1,6 @@
 package com.wwilkins.traveler.traveler;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import javax.sql.DataSource;
