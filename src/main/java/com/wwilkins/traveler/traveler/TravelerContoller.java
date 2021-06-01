@@ -1,6 +1,4 @@
 package com.wwilkins.traveler.traveler;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
@@ -13,10 +11,10 @@ public class TravelerContoller {
     public TravelerContoller(TravelerService travelerService) { this.travelerService = travelerService; }
     // Get All
     @GetMapping("/api/v1/travelers/{id}")
-    public List<Traveler> getAllTravelers(@PathVariable String id) { return travelerService.getAllTravelers(id); }
+    public ResponseEntity getAllTravelers(@PathVariable String id) { return travelerService.getAllTravelers(id); }
     // Get One
     @GetMapping("/api/v1/traveler/{id}")
-    public Traveler getOneTraveler(@PathVariable String id) { return travelerService.getOneTraveler(id); }
+    public ResponseEntity getOneTraveler(@PathVariable String id) { return travelerService.getOneTraveler(id); }
     // Create
     @PostMapping("/api/v1/traveler")
     public ResponseEntity insertTraveler(@RequestBody String body) { return travelerService.insertTraveler(body); }

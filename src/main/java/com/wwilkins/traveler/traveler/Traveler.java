@@ -1,9 +1,4 @@
 package com.wwilkins.traveler.traveler;
-
-import org.hibernate.annotations.Type;
-import org.springframework.stereotype.Component;
-
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,6 +11,7 @@ public class Traveler {
     //@Column(name="id", columnDefinition = "VARCHAR(255)", insertable = false, updatable = false, nullable = false)
     //    @NotNull(message = "customerId cannot be null")
     //    private String customerId
+    @NotNull(message = "travelerId cannot be null")
     private UUID travelerId;
     @NotNull(message = "customerId cannot be null")
     private UUID customerId;
@@ -35,7 +31,7 @@ public class Traveler {
     private String emergencyCountryCode;
     private String emergencyPhone;
     // Frequent flyer programs
-    private String frequentFlyerPrograms;
+    //private String frequentFlyerPrograms;
     private String flightPrefSeat;
     private String flightPrefSpecial;
     private String passportCountryCode;
@@ -62,7 +58,7 @@ public class Traveler {
         this.firstName = fistName;
         this.middleName = middleName;
         this.lastName = lastName;
-        //this.dob = LocalDate.parse(dob);
+        this.dob = LocalDate.parse(dob);
     }
 
 
@@ -76,7 +72,7 @@ public class Traveler {
         this.firstName = fistName;
         this.middleName = middleName;
         this.lastName = lastName;
-        //this.dob = LocalDate.parse(dob);
+        this.dob = LocalDate.parse(dob);
     }
 
 
@@ -109,7 +105,7 @@ public class Traveler {
 
     public String getDob() { return dob.toString(); }
     public void setDob(String dob) {
-        this.dob = LocalDate.parse(dob);
+        if(dob != null) this.dob = LocalDate.parse(dob);
     }
 
 
@@ -155,9 +151,9 @@ public class Traveler {
 
     @Override
     public String toString() {
-        return "Traveler{" + "'" +
-                ", travelerid=" + travelerId.toString() +
-                "  customerId="+ customerId.toString() +
+        return "Traveler{"  +
+                " travelerid=" + travelerId.toString() +
+                ", customerId="+ customerId.toString() +
                 ", firstName='" + firstName + "'" +
                 ", middleName='" + middleName + "'" +
                 ", lastName='" + lastName + "'" +

@@ -22,22 +22,21 @@ class TravelerApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
-        out.println("\n\n\n");
-
 
         // Test put (updater) one traveler
         try {
             out.println("\nUpdate One Traveler Output from Server .... \n");
-            URL url = new URL("http://localhost:8080/api/v1/traveler/d00e762d-6daf-4cbd-a8b6-e4fd2e7188b8");
+            URL url = new URL("http://localhost:8080/api/v1/traveler/f6fa2000-377d-46e3-9b0a-6b1ce9f6ecf9");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
             conn.setRequestMethod("PUT");
-            String jsonInputString = "{\"travelerId\": \"d00e762d-6daf-4cbd-a8b6-e4fd2e7188b8\", " +
-                    "\"customerId\": \"0006ade2-31e2-4b38-a641-e26135664b21\", " +
+            String jsonInputString = "{\"travelerId\": \"f6fa2000-377d-46e3-9b0a-6b1ce9f6ecf9\", " +
+                    "\"customerId\": \"000001d3-9ddf-4ca0-a861-31f4976f9fd8\", " +
+                    //"\"customerId\": \"0006ade2-31e2-4b38-a641-e26135664b21bad\", " +
                     "\"firstName\": \"Wade\", " +
-                    "\"middleName\": \"Clayton4\"," +
+                    "\"middleName\": \"Clayton50\"," +
                     "\"lastName\": \"Wilkins\"," +
                     "\"gender\": \"M\"," +
                     "\"dob\": \"1942-03-17\"," +
@@ -60,6 +59,7 @@ class TravelerApplicationTests {
                 os.write(input,0, input.length);
             }
             catch (Exception e){
+                System.out.println("Fail1:  ");
                 e.printStackTrace();
             }
             try(BufferedReader br = new BufferedReader(
@@ -71,45 +71,85 @@ class TravelerApplicationTests {
                 }
                 System.out.println(response);
             }
+            catch (Exception z){
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response);
+                    //throw new ArithmeticException("/ by zero");
+                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+                } catch (IOException e) {
+                    System.out.println("Error testing 4.1");
+                }
+            }
         } catch (MalformedURLException e) {
+            System.out.println("Fail3");
             e.printStackTrace();
         }
-
-
 
 
         // Test Get all Travelers
         try {
             out.println("\nGet all Travelers Output from Server .... \n");
             URL url = new URL("http://localhost:8080/api/v1/travelers/0006ade2-31e2-4b38-a641-e26135664b21");
+            //URL url = new URL("http://localhost:8080/api/v1/travelers/0006ade2-31e2-4b38-a641-e2613566_bad");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response);
+                    //throw new ArithmeticException("/ by zero");
+                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+                } catch (IOException e) {
+                    System.out.println("Error testing 4.1");
+                }
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream())));
-            String output;
-            while ((output = br.readLine()) != null) {
-                out.println(output);
+            else {
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                        (conn.getInputStream())));
+                String output;
+                while ((output = br.readLine()) != null) {
+                    out.println(output);
+                }
             }
             conn.disconnect();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
+
         // Test get one traveler
         try {
             out.println("\nGet One Traveler Output from Server .... \n");
-            URL url = new URL("http://localhost:8080/api/v1/traveler/d00e762d-6daf-4cbd-a8b6-e4fd2e7188b8");
+            URL url = new URL("http://localhost:8080/api/v1/traveler/4dd78a17-9daf-4201-a4e6-0b665e7d99bd");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response);
+                    //throw new ArithmeticException("/ by zero");
+                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+                } catch (IOException e) {
+                    System.out.println("Error testing 4.1");
+                }
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     (conn.getInputStream())));
@@ -126,7 +166,7 @@ class TravelerApplicationTests {
         // Test DELETE one traveler
         try {
             out.println("\nDelete One Traveler Output from Server .... \n");
-            URL url = new URL("http://localhost:8080/api/v1/traveler/12939357-7474-4555-b287-e631de7cb493");
+            URL url = new URL("http://localhost:8080/api/v1/traveler/00000e20-6147-4b7b-be9c-1518d80e3e4b");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -140,6 +180,21 @@ class TravelerApplicationTests {
             catch (Exception e){
                 e.printStackTrace();
             }
+            if (conn.getResponseCode() != 200) {
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response);
+                    //throw new ArithmeticException("/ by zero");
+                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+                } catch (IOException e) {
+                    System.out.println("Error testing 4.1");
+                }
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     (conn.getInputStream())));
             String output;
@@ -147,10 +202,10 @@ class TravelerApplicationTests {
                 out.println(output);
             }
             conn.disconnect();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
 
 
         // Test create one traveler
@@ -164,8 +219,8 @@ class TravelerApplicationTests {
             //conn.setRequestMethod("POST");
             String jsonInputString = "{"+
                     "\"travelerid\": \"-1\", " +
-                    "\"customerId\": \"20000000-2000-1000-1000-100000000000\", " +
-                    "\"firstName\": \"Wade2\", " +
+                    "\"customerId\": \"20000000-2000-1000-1000-920000000000\", " +
+                    "\"firstName\": \"Wade66666666668\", " +
                     "\"middleName\": \"Clayton\"," +
                     "\"lastName\": \"Wilkins\"," +
                     "\"userName\": \"wadewilkins\"," +
@@ -214,12 +269,12 @@ class TravelerApplicationTests {
             e.printStackTrace();
         }
 
-        /*
+/*
         String cid = null;
         cid = new String();
         // Test create MANY travelers
         try {
-            for (int i = 1; i < 2000; i++) {
+            for (int i = 1; i < 2000000; i++) {
                 cid = UUID.randomUUID().toString();
                 for (int x = 1; x <= 10; x++) {
                     out.println("\nCreate One Traveler Output from Server .... \n");
@@ -281,7 +336,7 @@ class TravelerApplicationTests {
         }catch(IOException e){
                     e.printStackTrace();
         }
-    */
+*/
 
 
 
