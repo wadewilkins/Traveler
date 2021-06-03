@@ -2,15 +2,22 @@ package com.wwilkins.traveler.traveler;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 @Configuration
-@ConfigurationProperties("spring.datasource")
+//@ConfigurationProperties("spring.datasource")
+@EnableAspectJAutoProxy
 public class TravelerConfig {
     private String driverClassName;
     private String url;
     private String username;
     private String password;
+
 
     public String getDriverClassName() {
         return driverClassName;
@@ -70,4 +77,5 @@ public class TravelerConfig {
         System.out.println(url);
         return "DB Connection to PROD";
     }
+
 }

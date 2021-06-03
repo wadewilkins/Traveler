@@ -1,4 +1,8 @@
 package com.wwilkins.traveler.traveler;
+import org.springframework.context.annotation.Bean;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -36,7 +40,7 @@ public class Traveler {
     private String flightPrefSpecial;
     private String passportCountryCode;
     private String passportNumber;
-
+    private Long id;
 
 
 //    private int age;

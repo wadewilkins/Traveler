@@ -9,11 +9,11 @@ import java.util.List;
 public interface TravelerRepository {
     void setDataSource(DataSource ds);
 
-    ResponseEntity<?> insertTraveler(String body);
+    public ResponseEntity<?> insertTraveler(String body);
     public ResponseEntity<?>  getAllTravelers(String cid);
-    ResponseEntity<?> getOneTraveler(String tid);
-    ResponseEntity<?> deleteOneTraveler(String tid, String body);
-    ResponseEntity<?> updateOneTraveler(String tid, String body) throws JsonProcessingException;
+    public ResponseEntity<?> getOneTraveler(String tid);
+    public ResponseEntity<?> deleteOneTraveler(String tid, String body);
+    public ResponseEntity<?> updateOneTraveler(String tid, String body) throws JsonProcessingException;
 
 }
 

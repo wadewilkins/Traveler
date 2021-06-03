@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -25,7 +26,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 
-@Service
+//@Service
+@Component
 public class TravelerService extends NamedParameterJdbcDaoSupport implements TravelerRepository{
     @Autowired
     DataSource dataSource;
@@ -33,7 +35,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
     private void initialize(){
         setDataSource(dataSource);
     }
-    private static final Logger logger = LoggerFactory.getLogger(TravelerApplication.class);
+    //private static final Logger logger = LoggerFactory.getLogger(TravelerApplication.class);
 
 
     @Override
@@ -48,7 +50,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             t2 = objectMapper.readValue(body, Traveler.class);
 
             t2.setTravelerId(UUID.randomUUID());
-            logger.error("Creating new traveler:  " + t2.toString() );
+            //logger.error("Creating new traveler:  " + t2.toString() );
 
 
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -59,7 +61,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
 
             allErrors.append("{");
             for (ConstraintViolation<Traveler> violation : violations) {
-                logger.error(violation.getMessage());
+                //logger.error(violation.getMessage());
                 String t;
                 if ( error > 1) {
                     t = ", \"Error" + error + "\": \"" + violation.getMessage() + "\"";
@@ -73,21 +75,44 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             allErrors.append("}");
         }
        catch (JsonProcessingException e) {
-            logger.error("Bad JSON on insert "+ body);
+            //logger.error("Bad JSON on insert "+ body);
             //throw e;
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 //
         if (violations.isEmpty()) {
             try {
-                String sql = "INSERT INTO Traveler (customer_id,traveler_id,first_name,last_name) VALUES (UUID_TO_BIN(?),UUID_TO_BIN(?), ?, ?)";
+                String sql = "INSERT INTO Traveler (customer_id,traveler_id,"+
+                                                    "first_name,middleName, "+
+                                                    "last_name,phone1, "+
+                                                    "gender,countryCode1," +
+                                                    "countryCode2,phone2, "+
+                                                    "emergencyFirstName, emergencyLastName,"+
+                                                    "emergencyCountryCode,emergencyPhone," +
+                                                    "flightPrefSeat, flightPrefSpecial," +
+                                                    "passportCountryCode,passportNumber"+
+                              "  ) "+
+                             " VALUES (UUID_TO_BIN(?),UUID_TO_BIN(?), "+
+                             "?, ?, ?, ?,?, ?,"+
+                             "?, ?,?,?,?,?,?,?,?,?"+
+                             " )";
                 assert getJdbcTemplate() != null;
-                getJdbcTemplate().update(sql, t2.getCustomerId().toString(), t2.getTravelerId().toString(), t2.getFirstName(), t2.getLastName());
-                logger.info("Created traveler:  " + t2);
+                logger.info(t2.toString());
+                getJdbcTemplate().update(sql, t2.getCustomerId().toString(), t2.getTravelerId().toString(), t2.getFirstName(),
+                                              t2.getMiddleName(),t2.getLastName(),t2.getPhone1(),
+                                              t2.getGender(), t2.getCountryCode1(),
+                                              t2.getCountryCode2(), t2.getPhone2(),
+                                              t2.getEmergencyFirstName(),t2.getEmergencyLastName(),
+                                              t2.getEmergencyCountryCode(), t2.getEmergencyPhone(),
+                                              t2.getFlightPrefSeat(), t2.getFlightPrefSpecial(),
+                                              t2.getPassportCountryCode(), t2.getPassportNumber()
+                                         );
+
+                //logger.info("Created traveler:  " + t2);
                 return new ResponseEntity<>(t2.toString(), HttpStatus.CREATED);
             }
-            catch( Exception e){
-                return new ResponseEntity<>("\"Failure\":  \"Duplicate?\"", HttpStatus.BAD_REQUEST);
+            catch( DataAccessException sa ){
+                return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
             }
             //return "Created traveler:  " + t2.toString();
         }
@@ -99,7 +124,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
     // End insert traveler
     @Override
     public ResponseEntity<?>  getAllTravelers(String cid) {
-        logger.info("In getAllTravelers NOW...." + cid);
+        //logger.info("In getAllTravelers NOW...." + cid);
         List<Traveler> result = new ArrayList<>();
         try {
             String sql = "SELECT BIN_TO_UUID(customer_id) AS C,BIN_TO_UUID(traveler_id) AS T, DATE_FORMAT(dob,'%Y-%m-%d') AS D, " +
@@ -140,8 +165,8 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
                 result.add(t);
             }
         }catch (DataAccessException sa){
-            logger.error("Error get all!  cid="+cid);
-            logger.error("Stack trace:  ", sa.getMessage(), sa);
+            //logger.error("Error get all!  cid="+cid);
+            //logger.error("Stack trace:  ", sa.getMessage(), sa);
             return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
            // return new ResponseEntity<>("\"Failure\":  \"Fetch all\"", HttpStatus.BAD_REQUEST);
         }
@@ -271,16 +296,16 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
                     //logger.info("Traveler data updated for ID " + t2.getTravelerId());
                     return new ResponseEntity<>(t2.toString(), HttpStatus.CREATED);
                 } else {
-                    logger.error("Error:  No Traveler found with ID " + t2.getTravelerId());
-                    logger.error(UpdateQuery.toString());
+                    //logger.error("Error:  No Traveler found with ID " + t2.getTravelerId());
+                    //logger.error(UpdateQuery.toString());
                     //params.entrySet().forEach(entry -> {
                     //    logger.error(entry.getKey() + " " + entry.getValue());
                     // });
                     return new ResponseEntity<>("Traveler Not Found:  " + tid, HttpStatus.BAD_REQUEST);
                 }
             }catch (DataAccessException sa){
-                logger.error("Error  for update one!  cid="+tid);
-                logger.error("Stack trace:  ", sa.getMessage(), sa);
+                //logger.error("Error  for update one!  cid="+tid);
+                //logger.error("Stack trace:  ", sa.getMessage(), sa);
                 return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
                 // return new ResponseEntity<>("\"Failure\":  \"Fetch all\"", HttpStatus.BAD_REQUEST);
             }
@@ -290,8 +315,8 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             //}
 
         } catch ( Exception e ){
-            logger.error("Error  for update one!  cid="+tid);
-            logger.error("Stack trace:  ", e.getMessage(), e);
+            //logger.error("Error  for update one!  cid="+tid);
+            //logger.error("Stack trace:  ", e.getMessage(), e);
             return new ResponseEntity<>( e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
