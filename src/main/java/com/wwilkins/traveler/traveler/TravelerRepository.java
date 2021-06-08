@@ -10,7 +10,7 @@ public interface TravelerRepository {
     void setDataSource(DataSource ds);
 
     public ResponseEntity<?> insertTraveler(String body);
-    public ResponseEntity<?>  getAllTravelers(String cid);
+    public ResponseEntity<?> getAllTravelers(String cid);
     public ResponseEntity<?> getOneTraveler(String tid);
     public ResponseEntity<?> deleteOneTraveler(String tid, String body);
     public ResponseEntity<?> updateOneTraveler(String tid, String body) throws JsonProcessingException;

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 @Configuration
-//@ConfigurationProperties("spring.datasource")
 @EnableAspectJAutoProxy
 public class TravelerConfig {
     private String driverClassName;

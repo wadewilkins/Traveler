@@ -24,26 +24,31 @@ import java.util.Arrays;
 @Component
 @Aspect
 public class TravelerCrudAspect {
-    //private static final Logger logger = LoggerFactory.getLogger(TravelerApplication.class);
-    private static final Logger logger = LoggerFactory.getLogger(TravelerCrudAspect.class);
 
-    @Around("execution(* TravelerService.*(..))")         //point-cut expression
-    public Object logAfterV1(ProceedingJoinPoint joinPoint) throws Throwable {
-        try {
-            Object result = joinPoint.proceed();
-            ResponseEntity<Traveler> t = (ResponseEntity<Traveler>) result;
-            int scv = t.getStatusCodeValue();
-            if( scv <200 || scv >= 400){
-                logger.info("Error on Exit: {}.{}() with result = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                        joinPoint.getSignature().getName(), result);
-            }
-            return result;
-        } catch (IllegalArgumentException e) {
-            logger.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
-                    joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
-            throw e;
-        }
-    }
+//    private static final Logger logger = LoggerFactory.getLogger(TravelerCrudAspect.class);
+
+//    @Around("execution(* TravelerService.*(..)) || execution(* TravelerValidator.*(..))" )         //point-cut expression
+//    public Object logAfterV1(ProceedingJoinPoint joinPoint) throws Throwable {
+//        try {
+//            logger.error("TESTING {}",joinPoint.getSignature().getName() );
+//            Object result = joinPoint.proceed();
+//            ResponseEntity<Traveler> t = (ResponseEntity<Traveler>) result;
+//            if ( result == null)
+//                return result;
+//            int scv = t.getStatusCodeValue();
+//            if( scv <200 || scv >= 400){
+//                logger.info("Error on Exit: {}.{}() with result = {}", joinPoint.getSignature().getDeclaringTypeName(),
+//                        joinPoint.getSignature().getName(), result);
+//            }
+//            return result;
+//        } catch (IllegalArgumentException e) {
+//            logger.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
+//                    joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+//            throw e;
+//        }
+//    }
+
+
 }
 
 

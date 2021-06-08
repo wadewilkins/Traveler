@@ -25,7 +25,8 @@ public class Traveler {
     @NotNull(message = "lastName cannot be null")
     private String lastName;
     private String gender;
-    private LocalDate dob;
+    @NotNull(message = "Date of birth cannot be null")
+    private String dob;
     private String countryCode1;
     private String phone1;
     private String countryCode2;
@@ -62,7 +63,7 @@ public class Traveler {
         this.firstName = fistName;
         this.middleName = middleName;
         this.lastName = lastName;
-        this.dob = LocalDate.parse(dob);
+        this.dob = dob;
     }
 
 
@@ -76,7 +77,7 @@ public class Traveler {
         this.firstName = fistName;
         this.middleName = middleName;
         this.lastName = lastName;
-        this.dob = LocalDate.parse(dob);
+        this.dob = dob;
     }
 
 
@@ -109,7 +110,7 @@ public class Traveler {
 
     public String getDob() { return dob.toString(); }
     public void setDob(String dob) {
-        if(dob != null) this.dob = LocalDate.parse(dob);
+        if(dob != null) this.dob = dob;
     }
 
 
@@ -155,28 +156,34 @@ public class Traveler {
 
     @Override
     public String toString() {
-        return "Traveler{"  +
-                " travelerid=" + travelerId.toString() +
-                ", customerId="+ customerId.toString() +
-                ", firstName='" + firstName + "'" +
-                ", middleName='" + middleName + "'" +
-                ", lastName='" + lastName + "'" +
-                ", gender='" + gender + "'" +
-                ", dob='" + dob + "'" +
-                ", countryCode1='" + countryCode1 + "'" +
-                ", phone1='" + phone1 + "'" +
-                ", countryCode2='" + countryCode2 + "'" +
-                ", phone2='" + phone2 + "'" +
+        String return_string = null;
+        return_string = "Traveler{";
+                if(travelerId != null)
+                    return_string = return_string+"  \"travelerid\": \"" + travelerId.toString() + "\"";
+                if(customerId != null)
+                    return_string = return_string+", \"customerId\": \""+ customerId.toString() +"\"";
+                return_string = return_string+
+                ", \"firstName=\": \"" + firstName + "\"" +
+                ", \"middleName\": \"" + middleName + "\"" +
+                ", \"lastName\": \""+ lastName + "\"" +
+                ", \"gender\": \"" + gender + "\"" +
+                ", \"dob\": \"" + dob + "\"" +
+                ", \"countryCode1\": \"" + countryCode1 + "\"" +
+                ", \"phone1\": \"" + phone1 + "\"" +
+                ", \"countryCode2\": \"" + countryCode2 + "\"" +
+                ", \"phone2\": \"" + phone2 + "\"" +
 
-                ", emergencyFirstName='" + emergencyFirstName + "'" +
-                ", emergencyLastName='" + emergencyLastName + "'" +
-                ", emergencyCountryCode='" + emergencyCountryCode + "'" +
-                ", emergencyPhone='" + emergencyPhone + "'" +
-                ", flightPrefSeat='" + flightPrefSeat + "'" +
-                ", flightPrefSpecial='" + flightPrefSpecial + "'" +
-                ", passportCountryCode='" + passportCountryCode + "'" +
-                ", passportNumber='" + passportNumber + "'" +
+                ", \"emergencyFirstName\": \"" + emergencyFirstName + "\"" +
+                ", \"emergencyLastName\": \"" + emergencyLastName + "\"" +
+                ", \"emergencyCountryCode\": \"" + emergencyCountryCode + "\"" +
+                ", \"emergencyPhone\": \"" + emergencyPhone + "\"" +
+                ", \"flightPrefSeat\": \"" + flightPrefSeat + "\"" +
+                ", \"flightPrefSpecial\": \"" + flightPrefSpecial + "\"" +
+                ", \"passportCountryCode\": \"" + passportCountryCode + "\"" +
+                ", \"passportNumber\": \"" + passportNumber + "\"" +
                 "}";
+
+                return return_string;
     }
 
 }

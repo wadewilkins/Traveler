@@ -27,10 +27,14 @@ import javax.validation.ValidatorFactory;
 
 
 //@Service
-@Component
+@Service
 public class TravelerService extends NamedParameterJdbcDaoSupport implements TravelerRepository{
     @Autowired
     DataSource dataSource;
+    @Autowired
+    TravelerValidator tv;
+    @Autowired
+    TravelerLogger logger;
     @PostConstruct
     private void initialize(){
         setDataSource(dataSource);
@@ -41,7 +45,9 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
     @Override
     public ResponseEntity<?> insertTraveler(String body) {
         Traveler t2 = null;
-        Set<ConstraintViolation<Traveler>> violations = null;
+        // Set<ConstraintViolation<Traveler>> violations = null;
+        //Set<String> violations = null;
+        String violations = null;
         StringBuilder allErrors = new StringBuilder();
 
         try{
@@ -50,75 +56,53 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             t2 = objectMapper.readValue(body, Traveler.class);
 
             t2.setTravelerId(UUID.randomUUID());
-            //logger.error("Creating new traveler:  " + t2.toString() );
 
-
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            Validator validator = factory.getValidator();
-            violations = validator.validate(t2);
-
-            int error = 1;
-
-            allErrors.append("{");
-            for (ConstraintViolation<Traveler> violation : violations) {
-                //logger.error(violation.getMessage());
-                String t;
-                if ( error > 1) {
-                    t = ", \"Error" + error + "\": \"" + violation.getMessage() + "\"";
-                }
-                else {
-                    t = "\"Error" + error + "\": \"" + violation.getMessage() + "\"";
-                }
-                allErrors.append(t);
-                error++;
+            violations = this.tv.validate(t2);
+            if (!violations.equals("Good")) {
+                this.logger.log(400, violations);
+                return new ResponseEntity<>(violations+t2.toString(), HttpStatus.BAD_REQUEST);
             }
-            allErrors.append("}");
         }
        catch (JsonProcessingException e) {
-            //logger.error("Bad JSON on insert "+ body);
-            //throw e;
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
-//
-        if (violations.isEmpty()) {
-            try {
-                String sql = "INSERT INTO Traveler (customer_id,traveler_id,"+
-                                                    "first_name,middleName, "+
-                                                    "last_name,phone1, "+
-                                                    "gender,countryCode1," +
-                                                    "countryCode2,phone2, "+
-                                                    "emergencyFirstName, emergencyLastName,"+
-                                                    "emergencyCountryCode,emergencyPhone," +
-                                                    "flightPrefSeat, flightPrefSpecial," +
-                                                    "passportCountryCode,passportNumber"+
-                              "  ) "+
-                             " VALUES (UUID_TO_BIN(?),UUID_TO_BIN(?), "+
-                             "?, ?, ?, ?,?, ?,"+
-                             "?, ?,?,?,?,?,?,?,?,?"+
-                             " )";
-                assert getJdbcTemplate() != null;
-                logger.info(t2.toString());
-                getJdbcTemplate().update(sql, t2.getCustomerId().toString(), t2.getTravelerId().toString(), t2.getFirstName(),
-                                              t2.getMiddleName(),t2.getLastName(),t2.getPhone1(),
-                                              t2.getGender(), t2.getCountryCode1(),
-                                              t2.getCountryCode2(), t2.getPhone2(),
-                                              t2.getEmergencyFirstName(),t2.getEmergencyLastName(),
-                                              t2.getEmergencyCountryCode(), t2.getEmergencyPhone(),
-                                              t2.getFlightPrefSeat(), t2.getFlightPrefSpecial(),
-                                              t2.getPassportCountryCode(), t2.getPassportNumber()
-                                         );
-
+        try {
+            String sql = "INSERT INTO Traveler (customer_id,traveler_id,"+
+                    "first_name,middleName, "+
+                    "last_name,phone1, "+
+                    "gender,countryCode1," +
+                    "countryCode2,phone2, "+
+                    "dob,"+
+                    "emergencyFirstName, emergencyLastName,"+
+                    "emergencyCountryCode,emergencyPhone," +
+                    "flightPrefSeat, flightPrefSpecial," +
+                    "passportCountryCode,passportNumber"+
+                    "  ) "+
+                    " VALUES (UUID_TO_BIN(?),UUID_TO_BIN(?), "+
+                    "?, ?, ?, ?,?, ?, ?,"+
+                    "?, DATE_FORMAT(?,'%Y-%m-%d'),?,?,?,?,?,?,?,?"+
+                    " )";
+            assert getJdbcTemplate() != null;
+            getJdbcTemplate().update(sql, t2.getCustomerId().toString(), t2.getTravelerId().toString(), t2.getFirstName(),
+                    t2.getMiddleName(),t2.getLastName(),t2.getPhone1(),
+                    t2.getGender(), t2.getCountryCode1(),
+                    t2.getCountryCode2(), t2.getPhone2(),
+                    t2.getDob(),
+                    t2.getEmergencyFirstName(),t2.getEmergencyLastName(),
+                    t2.getEmergencyCountryCode(), t2.getEmergencyPhone(),
+                    t2.getFlightPrefSeat(), t2.getFlightPrefSpecial(),
+                    t2.getPassportCountryCode(), t2.getPassportNumber()
+            );
                 //logger.info("Created traveler:  " + t2);
-                return new ResponseEntity<>(t2.toString(), HttpStatus.CREATED);
-            }
-            catch( DataAccessException sa ){
-                return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
-            }
-            //return "Created traveler:  " + t2.toString();
+            return new ResponseEntity<>(t2.toString(), HttpStatus.CREATED);
         }
-        else{
-            return new ResponseEntity<>(allErrors, HttpStatus.BAD_REQUEST);
-            //return "Error";
+        catch( DataAccessException sa ){
+            logger.log(400,sa.getMessage());
+            if ( sa.getMessage().contains("Duplicate entry") )
+                return new ResponseEntity<>( "Traveler already exists", HttpStatus.BAD_REQUEST);
+            else
+                return new ResponseEntity<>( "Unkown persistence error", HttpStatus.BAD_REQUEST);
+            //return new ResponseEntity<>( sa.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     // End insert traveler
