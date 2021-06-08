@@ -27,19 +27,31 @@ public class TravelerValidator {
             violations.add("First name can not be blank");
             error++;
         }
+        else
+        if( t.getFirstName().length() >= 255 ) {
+            violations.add("First name is maximum of 255 digits");
+            error++;
+        }
         if (StringUtils.isBlank(t.getLastName())) {
             violations.add("Last name can not be blank");
             error++;
         }
+        else
+            if( t.getLastName().length() >= 255 ) {
+                violations.add("Last name is maximum of 255 digits");
+                error++;
+            }
+
+
         if ((t.getCustomerId() == null)) {
             violations.add("CustomerID can not be null");
             error++;
         }
-        else
-        if (StringUtils.isBlank(t.getCustomerId().toString())) {
+        else if (StringUtils.isBlank(t.getCustomerId().toString())) {
             violations.add("CustomerID can not be blank");
             error++;
         }
+
         if ((t.getTravelerId() == null)) {
             violations.add("Traveler ID can not be null");
             error++;
@@ -224,17 +236,18 @@ public class TravelerValidator {
         if ( error == 0 )
             allErrors.append("Good");
         else {
+            int e=1;
             allErrors.append("{");
             for (String violation : violations) {
                 //logger.error(violation.getMessage());
                 String s;
-                if (error > 1) {
-                    s = ", \"Error" + error + "\": \"" + violation + "\"";
+                if (e > 1) {
+                    s = ", \"Error" + e + "\": \"" + violation + "\"";
                 } else {
-                    s = "\"Error" + error + "\": \"" + violation + "\"";
+                    s = "\"Error" + e + "\": \"" + violation + "\"";
                 }
                 allErrors.append(s);
-                error++;
+                e++;
             }
             allErrors.append("}");
         }

@@ -57,7 +57,7 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
 
             t2.setTravelerId(UUID.randomUUID());
 
-            violations = this.tv.validate(t2);
+            violations = tv.validate(t2);
             if (!violations.equals("Good")) {
                 this.logger.log(400, violations);
                 return new ResponseEntity<>(violations+t2.toString(), HttpStatus.BAD_REQUEST);
