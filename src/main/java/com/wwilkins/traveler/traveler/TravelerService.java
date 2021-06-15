@@ -54,7 +54,6 @@ public class TravelerService extends NamedParameterJdbcDaoSupport implements Tra
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             t2 = objectMapper.readValue(body, Traveler.class);
-
             t2.setTravelerId(UUID.randomUUID());
 
             violations = tv.validate(t2);
