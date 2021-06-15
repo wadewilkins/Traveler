@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 public class TravelerLogger {
     private static final Logger logger = LoggerFactory.getLogger(TravelerLogger.class);
 
-    void log(int scv, String msg){
-        if( scv <200 || scv >= 400){
+    void log(int scv, String msg) {
+        if (scv < 200 || scv >= 400) {
             logger.info("Error:" + msg);
-        }
-        else{
+        } else {
             logger.info("Info:" + msg);
         }
     }
+}
